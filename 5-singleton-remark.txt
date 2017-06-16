@@ -1,0 +1,4 @@
+forgot setting `getInstance` to be `static`.
+
+
+Thanks
