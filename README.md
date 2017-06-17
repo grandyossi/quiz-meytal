@@ -1,10 +1,11 @@
 # quiz-meytal (Meytal knows the relevance :)
 
-2017-06-16 9:30 (Friday)
+2017-06-17 23:45 (Saturday)
++ Uploaded tasks 1 (calculator) and 2 (rev-semaphore)
++ Still haven't decided whether to code task 4.
 
-1. Currently enjoying the calculator challenge
-2. Haven't yet coded tasks 2 & 4
-3. ALL will be ready Sunday morning
+
+ALL will be ready Sunday morning
 
 
 Kind regards
