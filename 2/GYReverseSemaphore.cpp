@@ -17,9 +17,7 @@ std::function<void()> GYReverseSemaphore::getWaitFunction()
 	{//notice: the actual WAIT is on a `unique_lock`. not wrapped in block.
 		std::unique_lock<mutex> lockUntil(m_countThreads_mutex);
 		//n invokers will wait for this member sync thread to finish
-		m_blockUntilTHReached.wait(
-								lockUntil,
-								[&] { return m_isTHReached; });
+		m_blockUntilTHReached.wait(lockUntil, [&] { return m_isTHReached; });
 	};
 }//n times
 void GYReverseSemaphore::mf_setLockedCount()
