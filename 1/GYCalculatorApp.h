@@ -2,6 +2,7 @@
 //	LOGIC :
 //	A.
 //		AT LEAST ONE arithmetic char before ANY digit char
+//		2017-06-19 : added fonctionality to enable `regular` input order.
 //	B.
 //		`n` numbers   <=>   `n-1` aritmetics
 //		digit_chars_count - 1   =   aritmetic_chars_count
