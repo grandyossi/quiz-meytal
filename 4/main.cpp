@@ -48,9 +48,6 @@ void thProc()
 }
 void doShakeThingzUp(std::function<void ()> inThreadProc)
 {
-	g_i = 0;
-	g_sai = 0;
-	g_isMutexInc = false;
 	std::vector<std::thread> vTh;
 	//TO_DO *1* : why sleep inside `thProcTimedMutex` causes crash?
 	//shake things up via zzzleep and run:
@@ -62,6 +59,9 @@ void doShakeThingzUp(std::function<void ()> inThreadProc)
 	//ONE main thread rules here:
 	cout << (g_i > 0 ? (g_isMutexInc ? "Mutex" : "Unsafe") : "Atomic") << " increment :   ";
 	cout << (g_i > 0 ? g_i : g_sai) << "\n";
+	g_i = 0;
+	g_sai = 0;
+	g_isMutexInc = false;
 }
 //============================================
 int main()
