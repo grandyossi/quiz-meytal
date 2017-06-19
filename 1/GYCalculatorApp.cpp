@@ -20,19 +20,18 @@ namespace {
 
 //The current stack is about to return.
 //@returns calculations according to current queues
-static __int64 getStackNumbersArtimetics(
-						queue<__int64>& inNumbers,
-						queue<char>&	inAritmetics)
+static __int64 getStackNumbersArtimetics(queue<__int64>& inNumbers,
+					 queue<char>&	inAritmetics)
 {//TO_DO *1* : assert `n` numbers , `n-1` aritmetics ?
 	__int64 x, y, tempCalc = 0;
 	//inNumbers is a queue -> can't push tempCalcz to the queue!
 	bool isCalcMade = false;//++
-							//TO_DO *1* : assert NONZERO sized aritmeticz container
+	//TO_DO *1* : assert NONZERO sized aritmeticz container
 	while (inNumbers.size() > 1 || isCalcMade)
 	{
 		if (isCalcMade)
 		{
-			x = tempCalc;
+			x = tempCalc;//current x is the previous calc result
 			isCalcMade = false;
 		}
 		else
@@ -58,7 +57,7 @@ static __int64 getStackNumbersArtimetics(
 		inAritmetics.pop();
 		if (inNumbers.size() == 0) break;//++
 		isCalcMade = true;//++
-						  //org : inNumbers.push(tempCalc);
+		//org : inNumbers.push(tempCalc);
 	}
 	return (inNumbers.size() == 0) ? tempCalc : inNumbers.front();
 }
@@ -68,33 +67,28 @@ static __int64 getStackNumbersArtimetics(
 //recursive input of end-user chars via a static method
 //@returns current stack's calculation
 //-------------------------------------------------------------------------
-static	__int64 getCalculation(
-					queue<char>& inFifoPrevAritmicz = fifoAritmeticzGlobal)
+static	__int64 getCalculation(queue<char>& inFifoPrevAritmicz = fifoAritmeticzGlobal)
 {
 	char			anInput = 0;
 	//true once `fifoDigitz` has elements
 	bool			isNumberInput = false;//number may be zero
 	__int64			theSign = 1, aVal = 0, tempNumber = 0;
-	//stream of digits
-	////////REM : not O(n)    queue<__int64>	fifoDigitz;
-	//steam of aritmetic chars
+	//queue of aritmetic chars
 	queue<char>		fifoAritmeticCharz;
-	//digits perform a number OR calculations result placeholder
-	queue<__int64>	lifoNumbers;
+	//the digits inputted now form numbers :
+	//2 1 (two and one) != 21 (twenty one)
+	queue<__int64>	fifoNumbers;
 	//
 	while (anInput != '\r' && anInput != '\n' && anInput != ')')
 	{
 		anInput = gy_get_char();
 		if ('(' == anInput)
-			lifoNumbers.push(
+			fifoNumbers.push(
 				getCalculation(fifoAritmeticCharz)); //<- RECURSIVE
 		else
-		{//current stack
-			if (getIsCharArtimetic(anInput))
-				fifoAritmeticCharz.push(anInput);
-			else if ((aVal = getCharAsDigit(anInput))
-					 != GY_NOT_A_DIGIT)
-			{////////FIX :
+		{//current stack / input queue
+			if ((aVal = getCharAsDigit(anInput)) != GY_NOT_A_DIGIT)
+			{
 				if (tempNumber == 0)
 				{
 					isNumberInput = true;
@@ -106,38 +100,46 @@ static	__int64 getCalculation(
 					tempNumber += aVal;
 				}
 				////////////fifoDigitz.push(aVal);
-			}
-			else if (' ' == anInput || '\r' == anInput ||
-				'\n' == anInput || ')' == anInput)
-			{//white space (std::ws) signifies a gap between NUMBERS :
-			 //2 1 (two and one) != 21 (twenty one).
-			 //ignore leading junk spaces <-> size > 0
-				////////REM : not O(n)
-				////////if (fifoDigitz.size() > 0)
-				////////{
-				////////	isNumberInput = true;//the digits may build a number
-				////////	aVal = 0;
-				////////}
-				////////while (fifoDigitz.size() > 0)
-				////////{//c++ power is... pow (not ^)
-				////////	aVal += fifoDigitz.front() *
-				////////		static_cast<__int64>(
-				////////			pow(10, fifoDigitz.size() - 1));
-				////////	fifoDigitz.pop();
-				////////}
-				if (isNumberInput)
+			}//numeric
+			else
+			{//NAN
+				if (getIsCharArtimetic(anInput))
 				{
-					lifoNumbers.push(theSign * tempNumber);
-					theSign = 1;
-					isNumberInput = false;
-					tempNumber = 0;
+					fifoAritmeticCharz.push(anInput);
+					anInput = ' ';//disruptive
 				}
-			}
-			else if ('m' == anInput) theSign = -1;//TO_DO *4* : "mmmmX" ?
+				if (' ' == anInput || '\r' == anInput ||
+					'\n' == anInput || ')' == anInput)
+				{//white space signifies a gap between NUMBERS
+				 //TO_DO *4*  read  : std::ws
+				 //ignore leading junk spaces <-> size > 0
+					////////REM : not O(n)
+					////////if (fifoDigitz.size() > 0)
+					////////{
+					////////	isNumberInput = true;//the digits may build a number
+					////////	aVal = 0;
+					////////}
+					////////while (fifoDigitz.size() > 0)
+					////////{//c++ power is... pow (not ^)
+					////////	aVal += fifoDigitz.front() *
+					////////		static_cast<__int64>(
+					////////			pow(10, fifoDigitz.size() - 1));
+					////////	fifoDigitz.pop();
+					////////}
+					if (isNumberInput)
+					{
+						fifoNumbers.push(theSign * tempNumber);
+						theSign = 1;//resets :
+						isNumberInput = false;
+						tempNumber = 0;
+					}
+				}
+				else if ('m' == anInput) theSign = -1;//TO_DO *4* : "mmmmX"?
+			}//nan
 		}//within current stack
 	}//while
 	return getStackNumbersArtimetics(
-		lifoNumbers,
+		fifoNumbers,
 		(fifoAritmeticCharz.size() != 0)/*no aritmetic input in parenz?*/
 		? fifoAritmeticCharz : inFifoPrevAritmicz);
 } //getCalculation
