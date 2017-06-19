@@ -23,10 +23,9 @@ void thProcTimedMutex()
 	if (g_i_mutex_lock.try_lock_for(std::chrono::milliseconds(18)))
 	{
 		g_isMutexInc = true;
-		//OK also :   int k = 0;
 		//std::timed_mutex has non-recursive ownership semantics:
 		//ONLY ONE lock can be acquired within the same thread
-		//(that's why the lock is not within the loop)
+		//(that's why the lock is not inside the `for` { loop })
 		for (int k = 0; k < 10; ++k) ++g_i;
 		g_i_mutex_lock.unlock();
 	}//try lock
