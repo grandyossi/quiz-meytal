@@ -21,7 +21,7 @@ namespace {
 //The current stack is about to return.
 //@returns calculations according to current queues
 static __int64 getStackNumbersArtimetics(queue<__int64>& inNumbers,
-					 queue<char>&	inAritmetics)
+					 queue<char>& inAritmetics)
 {//TO_DO *1* : assert `n` numbers , `n-1` aritmetics ?
 	__int64 x, y, tempCalc = 0;
 	//inNumbers is a queue -> can't push tempCalcz to the queue!
