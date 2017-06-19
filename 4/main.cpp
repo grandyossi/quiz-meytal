@@ -47,7 +47,7 @@ void thProc()
 }
 void doShakeThingzUp(std::function<void ()> inThreadProc)
 {
-	std::vector<std::thread> vTh;
+	std::vector<thread> vTh;
 	//TO_DO *1* : why sleep inside `thProcTimedMutex` causes crash?
 	//shake things up via zzzleep and run:
 	std::this_thread::sleep_for(std::chrono::milliseconds(180));
