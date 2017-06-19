@@ -1,5 +1,4 @@
-# quiz-meytal
-Meytal knows the relevance :)
+# quiz-meytal | Tasks List
 
 #1 : Calculator
 
